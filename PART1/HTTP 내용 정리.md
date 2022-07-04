@@ -418,6 +418,8 @@
 > 안전이든 멱등이든,수천번 요청으로 로그가 쌓이게 된다던가, 외부요인으로 중간에 리소스가 변경되는 예외상황 까지는 고려하지 않는다.
 
 ### 캐시가능 
+ - 캐시란? 값을 미리 복사해 놓은 임시 장소를 가리킨다.
+   - [쿠키와 캐시의 차이점](https://www.quora.com/What-is-the-difference-between-cookies-and-cache)  
  - 응답 결과 리소스를 캐시해서 사용해도 되는가? 
  - GET, HEAD, POST, PATCH 캐시가능
    - 실제로는 `GET`, `HEAD` 정도만 캐시로 사용
