@@ -200,12 +200,119 @@
 <br></br>
 
 # HTTP 상태코드
+- 1xx (Informational): 요청이 수신되어 처리중
+- 2xx (Successful): 요청 정상 처리
+- 3xx (Redirection): 요청을 완료하려면 추가 행동이 필요
+- 4xx (Client Error): 클라이언트 오류, 잘못된 문법등으로 서버가 요청을 수행할 수 없음
+- 5xx (Server Error): 서버 오류, 서버가 정상 요청을 처리하지 못함
+
+<br></br>
+## 1xx (Informational)
+
+<br></br>
+## 2xx (Successful)
+
+<br></br>
+## 3xx (Redirection)
+
+<br></br>
+## 4xx (Client Error)
+
+<br></br>
+## 5xx (Server Error)
+- 서버 문제로 오류 발생
+- 서버에 문제가 있기 때문에 재시도 하면 성공할 수도 있음(복구가 되거나 등등)
 
 
 <br></br>
 <br></br>
 # HTTP 해더_ 일반해더
+## HTTP 헤더 개요
+ - `header-field` = field-name ":" OWS field-value OWS
 
+ - HTTP 전송에 필요한 모든 부가정보
+
+### RFC2616 (과거)
+- [헤더 분류](https://developer.mozilla.org/ko/docs/Web/HTTP/Messages)
+  - General 헤더: 메시지 전체에 적용되는 정보, 예) Connection: close
+  - Request 헤더: 요청 정보, 예) User-Agent: Mozilla/5.0 (Macintosh; ..)
+  - Response 헤더: 응답 정보, 예) Server: Apache
+  - Entity 헤더: 엔티티 바디 정보, 예) Content-Type: text/html, Content-Length: 3423
+- 바디
+  - 메시지 본문(message body)은 엔티티 본문(entity body)을 전달하는데 사용
+  - 엔티티 본문은 요청이나 응답에서 전달할 실제 데이터
+  - `엔티티 헤더`는 엔티티 `본문의 데이터`를 **해석할 수 있는 정보 제공**
+  - 데이터 유형(html, json), 데이터 길이, 압축 정보 등등
+
+> 현재는 RFC2616은 폐기됨  
+> 2014년 RFC7230~7235 등장
+
+### RFC723x변화
+- 엔티티(Entity) -> 표현(Representation)
+- Representation = representation Metadata + Representation Data
+- 표현 = 표현 메타데이터 + 표현 데이터
+
+<img src="https://user-images.githubusercontent.com/104331549/178142522-0389439f-1baf-4189-a13b-13a1a7ad7081.png">
+
+- 메시지 본문(message body)을 통해 표현 데이터 전달
+- 메시지 본문 = 페이로드(payload)
+- 표현은 요청이나 응답에서 전달할 실제 데이터
+- 표현 헤더는 표현 데이터를 해석할 수 있는 정보 제공
+- 데이터 유형(html, json), 데이터 길이, 압축 정보 등등
+- 참고: 표현 헤더는 표현 메타데이터와, 페이로드 메시지를 구분해야 하지만, 여기서는 생략
+
+<br></br>
+
+## 표현
+> 크게 4가지
+- Content-Type: 표현 데이터의 형식
+- Content-Encoding: 표현 데이터의 압축 방식
+- Content-Language: 표현 데이터의 자연 언어
+- Content-Length: 표현 데이터의 길이
+
+### Content-Type
+- 표현 데이터의 형식 설명
+- 미디어 타입, 문자 인코딩
+  - text/html; charset=utf-8
+  - application/json
+    - Json 문자 인코딩 기본이 UTF-8 이다.
+  - image/png
+### Content-Encoding
+- 표현 데이터 인코딩
+  - 표현 데이터를 `압축`하기 위해 사용
+- 데이터를 전달하는 곳에서 압축 후 인코딩 헤더 추가  
+- 데이터를 읽는 쪽에서 인코딩 헤더의 정보로 압축 해제
+- 예)
+  - gzip
+  - deflate
+  - identity
+### Content-Language
+- 표현 데이터의 자연 언어를 표현
+
+<img src="https://user-images.githubusercontent.com/104331549/178142790-26bdd31e-97f3-43d9-a951-31e383f6e653.png">
+
+ - ko : 한국어
+ - en : 영어
+
+### Content-Length
+- 바이트 단위
+- Transfer-Encoding(전송 코딩)을 사용하면 Content-Length를 사용하면 안됨
+
+<br></br>
+<br></br>
+
+## 콘텐츠 협상
+> 클라이언트가 선호하는 표현 요청
+- Accept: 클라이언트가 선호하는 미디어 타입 전달
+- Accept-Charset: 클라이언트가 선호하는 문자 인코딩
+- Accept-Encoding: 클라이언트가 선호하는 압축 인코딩
+- Accept-Language: 클라이언트가 선호하는 자연 언어
+
+## 전송방식
+## 일반정보
+## 특별한 정보
+## 인증
+## 쿠키
 <br></br>
 <br></br>
 # HTTP 해더_캐시와 조건부 요청
