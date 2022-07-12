@@ -307,12 +307,112 @@
 - Accept-Charset: 클라이언트가 선호하는 문자 인코딩
 - Accept-Encoding: 클라이언트가 선호하는 압축 인코딩
 - Accept-Language: 클라이언트가 선호하는 자연 언어
+- 협상헤더는 **요청시에만 사용**
+
+> MediaType은 이렇게 해주고, Char-set도 이렇게해주고, 압축은 이렇게, 언어는 한국어로 해줘~
+
+### 예시 
+> 언어 같은 경우 웹애플리케이션이 지원하는 언어가 일어, 영어, 독일어가 있다고 가정하자.  
+> 하지만, 우리는 한국어로 보고싶지만, 아쉽게도 지원하는 언어가 없다.   
+> 이 경우 우선순위를 활용한다.   
+
+#### 원칙1 우선순위
+- 1~0 까지 수가 클 수록 우선순위가 높다.
+  - Accept-Language: `ko-KR`,`ko;q=0.9`,`en-US;q=0.8`,`en;q=0.7`
+  - `1`은 생략가능
+  - `ko-KR`은 남한, `ko`은 대한민국(남한+북한)
+
+#### 원칙2 구체적인것 
+ - 수가 없을땐, 정보가 구체적일수록 우선순위가 높다.
+   - Accept: text/*, text/plain, text/plain;format=flowed, */*
+   - 1. `text/plain;format=flowed`
+   - 2. `text/plain`
+
+<br></br>
+<br></br>
 
 ## 전송방식
+ > `서버`-> `클라이어트`단순하게 네가지가 있다.
+ - 단순 전송(Content-Length)
+   - 길이 값을 알고 있을 때, 해당 길이 만큼 한번에 전송하는 방법
+ - 압축 전송(Content-Encoding)
+   - Gzip같은 걸로, 바이트코드를 압축시켜, 전송하는 방법
+   - 압축정보인 `Content-Encoding: gzip`표기 필요
+ - 분할 전송(Transfer-Encoding)
+   - `Transfer-Encoding : chunked`
+   - 분할하여 전송, 클라이언트는 받는 데로 사용
+   - `Content-Length`를 넣으면 안됨
+ - 범위 전송(Range, Content-Range)
+   - 용량이 큰 이미지파일의 경우, 범위를 지정하여 나눠서 전송
+   - `Content-Range : 1001-2000/2000`
+
+<br></br>
+<br></br>
+
 ## 일반정보
+- From: 유저 에이전트의 이메일 정보
+  - 검색 엔진 같은 곳에서 사용하고, 일반적으로는 잘 사용되지 않음
+  - 요청(request)에서 사용
+- **Referer**: 이전 웹 페이지 주소
+  - 현재 요청된 페이지의 **이전 웹 페이지 주소** 
+  - 유입경로 분석가능 
+  - 요청(request)에서 사용 
+- User-Agent: 유저 에이전트 애플리케이션 정보
+  - `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36`
+  - 클리이언트의 애플리케이션 정보(어떤 웹 브라우저인지 정보)
+  - 통계 정보 수집 가능
+  - 요청(request)에서 사용
+- Server: 요청을 처리하는 오리진 서버의 소프트웨어 정보
+  - 마지막 도착한 서버 
+  - 응답(response)에서 사용
+- Date: 메시지가 생성된 날짜
+  - 응답(response)에서 사용
+
+<br></br>
+<br></br>
+
 ## 특별한 정보
+
+### Host 
+ - 필수 헤더!
+ - 하나의 서버가 여러 도메인을 처리해야할 때 
+ - 하나의 IP 주소에 여러 도메인이 적용되어 있을 때 
+ - 집전화 느낌(번호는 하나인데, 여러사람이 있을 때)
+ - 요청(request)에서 사용
+### Location 
+ - Location 헤더가 있으면, Location 위치로 자동 이동
+   - 201 (Created): Location 값은 요청에 의해 생성된 리소스 URI
+   - 3xx (Redirection): Location 값은 요청을 자동으로 리디렉션하기 위한 대상 리소스를 가리킴
+
+### Allow 
+ - 허용 가능한 HTTP 메서드
+ - 응답에서 사용, 잘 사용 안함.
+
+### Retry-After
+- 유저 에이전트가 다음 요청을 하기까지 기다려야하는 시간
+  - `Retry-After: Fri, 31 Dec 1999 23:59:59 GMT (날짜 표기)`
+  - 실제 적용하기 어렵다.
+
+<br></br>
+
 ## 인증
+- Authorization: 클라이언트 인증 정보를 서버에 전달
+  - 요청에서 사용
+- 401 Unauthorized 오류가 났을때는 응답에서 사용
+<br></br>
+
 ## 쿠키
+ > 2개의 헤더를 사용한다. 
+  - Set-Cookie(서버 -> 클라이언트)
+    - 응답에서 사용 
+  - Cookie(클라이언트 -> 서버)
+    - 요청에서 사용
+
+### 쿠키
+
+> 서버가 무상태이기 때문에, 클라이언트의 쿠키가 필요하다. 
+
+
 <br></br>
 <br></br>
 # HTTP 해더_캐시와 조건부 요청
