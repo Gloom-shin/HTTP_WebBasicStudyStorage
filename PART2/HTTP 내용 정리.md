@@ -18,20 +18,20 @@
 - [3xx](#)
 - [4xx](#)
 ### HTTP 해더_ 일반해더
-- [HTTP 헤더 개요](#)
-- [표현](#)
-- [콘텐츠 협상](#)
-- [전송방식](#)
-- 일반정보
-- 특별한 정보
-- 인증
-- 쿠키
+- [HTTP 헤더 개요](#HTTPHeader)
+- [표현](#Expression)
+- [콘텐츠 협상](#ContentNego)
+- [전송방식](#TransferMethod)
+- [일반정보](#General)
+- [특별한 정보](#Special)
+- [인증](#Authorization)
+- [쿠키](#Cookie)
 ### HTTP 해더_캐시와 조건부 요청
-- [캐시 기본 동작](#)
-- [검증 헤더와 조건부요청](#)
-- [캐시와 조건부 요청 헤더](#)
-- 프록시 캐시
-- 캐시 무효화
+- [캐시 기본 동작](#CacheBasic)
+- [검증 헤더와 조건부요청](#VerificationHeader)
+- [캐시와 조건부 요청 헤더](#IfRequest)
+- [프록시 캐시](#ProxyCache)
+- [캐시 무효화](#CacheInvalidation)
 
 <br></br>
 <br></br>
@@ -227,7 +227,7 @@
 <br></br>
 <br></br>
 # HTTP 해더_ 일반해더
-## HTTP 헤더 개요
+## HTTP 헤더 개요 <a name="HTTPHeader"></a>
  - `header-field` = field-name ":" OWS field-value OWS
 
  - HTTP 전송에 필요한 모든 부가정보
@@ -250,7 +250,7 @@
 ### RFC723x변화
 - 엔티티(Entity) -> 표현(Representation)
 - Representation = representation Metadata + Representation Data
-- 표현 = 표현 메타데이터 + 표현 데이터
+- **표현 = 표현 메타데이터 + 표현 데이터**
 
 <img src="https://user-images.githubusercontent.com/104331549/178142522-0389439f-1baf-4189-a13b-13a1a7ad7081.png">
 
@@ -263,7 +263,7 @@
 
 <br></br>
 
-## 표현
+## 표현<a name="Expression"></a>
 > 크게 4가지
 - Content-Type: 표현 데이터의 형식
 - Content-Encoding: 표현 데이터의 압축 방식
@@ -301,7 +301,7 @@
 <br></br>
 <br></br>
 
-## 콘텐츠 협상
+## 콘텐츠 협상<a name="ContentNego"></a>
 > 클라이언트가 선호하는 표현 요청
 - Accept: 클라이언트가 선호하는 미디어 타입 전달
 - Accept-Charset: 클라이언트가 선호하는 문자 인코딩
@@ -331,7 +331,7 @@
 <br></br>
 <br></br>
 
-## 전송방식
+## 전송방식<a name="TransferMethod"></a>
  > `서버`-> `클라이어트`단순하게 네가지가 있다.
  - 단순 전송(Content-Length)
    - 길이 값을 알고 있을 때, 해당 길이 만큼 한번에 전송하는 방법
@@ -349,7 +349,7 @@
 <br></br>
 <br></br>
 
-## 일반정보
+## 일반정보<a name="General"></a>
 - From: 유저 에이전트의 이메일 정보
   - 검색 엔진 같은 곳에서 사용하고, 일반적으로는 잘 사용되지 않음
   - 요청(request)에서 사용
@@ -371,7 +371,7 @@
 <br></br>
 <br></br>
 
-## 특별한 정보
+## 특별한 정보<a name="Special"></a>
 
 ### Host 
  - 필수 헤더!
@@ -395,13 +395,13 @@
 
 <br></br>
 
-## 인증
+## 인증<a name="Authorization"></a>
 - Authorization: 클라이언트 인증 정보를 서버에 전달
   - 요청에서 사용
 - 401 Unauthorized 오류가 났을때는 응답에서 사용
 <br></br>
 
-## 쿠키
+## 쿠키<a name="Cookie"></a>
  > 2개의 헤더를 사용한다. 
   - Set-Cookie(서버 -> 클라이언트)
     - 응답에서 사용 
@@ -492,7 +492,7 @@
 <br></br>
 # HTTP 해더_캐시와 조건부 요청
 
-## 캐시
+## 캐시<a name="CacheBasic"></a>
  - 매번 웹브라우저에 접속할 때마다, (응답헤더+응답바디)HTTP메시지를 다운받아, 화면에 띄우는 작업은 비효율적이다.
  - 그래서 캐시라는 웹 저장소에 일정시간동안 보관하고, 바로 사용할 수 있게 해준다. 
 <p align="center"><img src="https://user-images.githubusercontent.com/104331549/178640491-8a495047-35ea-4f76-9619-1a998ecbd8c3.png" width="80%"></p>
@@ -514,5 +514,140 @@
 > 하지만, 만약 두 데이터가 같다면??
 
 
-## 검증 헤더와 조건부 요청
-<p align="center"><img src="" width="80%"></p>
+<br></br>
+<br></br>
+
+## 검증 헤더와 조건부 요청<a name="VerificationHeader"></a>
+> 캐시 유효시간이 초과해서 서버에 다시 요청하면 2가지 상황
+ 
+ - 서버 데이터가 그대로거나, (굳이?)
+ - 서버 데이터가 변경되거나, (갱신 필요)
+
+ - 클라이언트 데이터와 서버의 데이터가 같다는 사실을 확인할 수 있는 방법이 **검증해더!**
+
+### 검증 헤더 추가
+
+- 아래 그림과 같이, 응답 헤더 정보에  `last-modified`에 데이터 최종 수정일을 전송시켜, 클라이언트 캐시에 저장시킨다.
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178731372-2c2bb198-c5c1-4a97-a1b7-21fea413fc2a.png" width="80%"></p>
+
+> 그리고 캐시시간이 초과!!
+  
+ - 다시 요청할때, HTTP 메시지 요청 헤더에, 캐시에 입력된 최송수정일을 헤더에 포함시켜 같이 보낸다.(요청헤더의 cookie정보는 암호화되어 있어 알아보기 힘듬)
+ - 여기서, `if-modified-since`을 **조건부 요청**이라고 한다.
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178731663-667cfdd7-50a1-4470-9e22-54a2ed541d90.png" width="80%"></p>
+
+ - 아직 데이터가 수정되지 않았다는 사실을 확인할 수 있다. 
+   - 그럼 HTTP 응답 헤더에서 `status 304 Not Modified`를 보낸다.
+   - HTTP 응답 **바디는 전송하지 않는다.**
+   - 기존 캐시에 있던 정보는 갱신된다.
+
+<br></br>
+
+#### 검증 헤더 
+- 캐시 데이터와 서버 데이터가 같은지 검증하는 데이터
+- Last-Modified , ETag
+
+#### 조건부 요청 헤더
+- 조건부 요청 헤더
+- 검증 헤더로 조건에 따른 분기
+- If-Modified-Since: Last-Modified 사용
+- If-None-Match: ETag 사용
+- 조건이 만족하면 200 OK 
+  - 캐시를 갱신하기위해 모든 데이터를 다운 받음
+- 조건이 만족하지 않으면 304 Not Modified 
+  - 기존 캐시를 사용하기에, 헤더 데이터만 다운 받음
+
+<br></br>
+### 단점
+- 1초 미만(0.x초) 단위로 캐시 조정이 불가능
+- 날짜 기반의 로직 사용
+- 데이터를 수정해서 날짜가 다르지만, 같은 데이터를 수정해서 데이터 결과가 똑같은 경우
+- 서버에서 별도의 캐시 로직을 관리하고 싶은 경우
+  - 예) 스페이스나 주석처럼 크게 영향이 없는 변경에서 캐시를 유지하고 싶은 경우
+
+> ETag로 해결가능
+
+### ETag, If-None-Match
+ - ETag(Entity Tag)
+- 진짜 단순하게 ETag만 보내서 같으면 유지, 다르면 다시 받기
+
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178742894-e2222c23-c6fc-40c4-b42f-8c53eec505fe.png" width="60%"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178742913-a72ea3ed-3867-44c2-a3ef-4625b09d30ac.png" width="70%"></p>
+
+ - 캐시 제어 로직을 서버에서 완전히 관리(최종 수정일과 다르게, 서버에 의해 관리된다.)
+
+<br></br>
+<br></br>
+
+
+ 
+## 캐시와 조건부 요청 헤더<a name="IfRequest"></a>
+> 캐시도 제어 관련된 헤더가 있다.
+
+- **Cache-Control**: 캐시 제어
+- Pragma: 캐시 제어(하위 호환) 사용x
+- Expires: 캐시 유효 기간(하위 호환)
+
+
+### Cache-Control 
+ - `max-age` : 캐시 유효시간, **초단위** 유용!!
+   - 보통 길게 잡음
+   - 캐시의 수명을 결정
+ - `no-cache` 
+   - 데이터는 캐시해도 되지만, 항상 오리진(origin) 서버에 검증하고 사용
+   - 캐시의 행동 방식을 결정
+ - `no-store`
+   - 데이터에 민감한 정보가 있으므로 저장하면 안됨.
+   - 메모리에서 사용하고 최대한 빨리 삭제
+   - 캐시의 행동 방식을 결정
+
+### Expires
+ 
+ - 캐시 만료일을 정확한 **날짜**로 지정
+   - expires: Mon, 01 Jan 1990 00:00:00 GMT
+ - Cache-Control: `max-age`와 함께 사용하면 Expires는 무시
+
+
+<br></br>
+<br></br>
+
+## 프록시 캐시<a name="ProxyCache"></a>
+ - 원(origin)서버에서 웹브라우저까지 정보가 오려면, 오래걸린다. 
+ - 그래서 중간에 프록시 캐시 서버를 둔다.
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178745735-14127899-c8d5-40b3-a7eb-35b6f671034e.png" width="80%"></p>
+
+- CDN서버라고 사용하고 있다.
+- AWS에서는 cloud_Front 라고 서비스 제공
+
+### Cache-Control
+- Cache-Control: **public** 
+  - 응답이 public 캐시에 저장되어도 됨
+  - 중간 프록시 캐시 서버에 저장됨.
+- Cache-Control: **private**
+  - 응답이 해당 사용자만을 위한 것임, private 캐시에 저장해야 함(기본값)
+- Cache-Control: s-maxage
+  - 프록시 캐시에만 적용되는 max-age
+- Age: 60 (HTTP 헤더)
+  - 오리진(origin) 서버에서 응답 후 프록시 캐시 내에 머문 시간(초)
+
+<br></br>
+<br></br>
+
+## 캐시 무효화<a name="CacheInvalidation"></a>
+> 캐시를 적용하지 않아도 웹 브라우저가 임의로 캐시를 하는 경우가 많다.   
+> 즉, 확실하게 캐시되지않게 해야될 경우가 필요하다.  
+ - 확실한 캐시 무효화 응답
+ - `Cache-Control: no-cache, no-store, must-revalidate`
+ - `Pragma : no-cache` (혹시 모를 과거 버전의 캐시 방지)
+
+### Cache-Control: must-revalidate
+- 캐시 만료후 최초 조회시 원 서버에 검증해야함
+- 원 서버 접근 실패시 반드시 오류가 발생해야함 - 504(Gateway Timeout)
+- `must-revalidate`는 캐시 유효 시간이라면 캐시를 사용함
+
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178749747-b119cc48-22cf-4caf-b18d-cca41b2eb01a.png" width="80%"></p>
+
+ - 이와 같은 경우 프록시 캐시 서버가 옛날 데이터를 보여줌으로써, `200 OK` 응답을 보낼 수도 있다.
+ - 여기서 확실하게, 캐시를 사용하지 못하게 하려면 `must-revalidate`를 사용해야된다.
+
+<p align="center"><img src="https://user-images.githubusercontent.com/104331549/178750342-ccd0c573-7a98-4c24-9524-fc5bb1658f18.png" width="80%"></p>
